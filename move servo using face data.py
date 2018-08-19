@@ -1,6 +1,11 @@
+import serial                                 # add Serial library for Serial communication
 import cv2
+
+Arduino_Serial = serial.Serial('com10',9600)  #Create Serial port object called arduinoSerialData
+print Arduino_Serial.readline()               #read the serial data and print it as line
+
 face_cascade= cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-cap=cv2.VideoCapture(0)
+cap=cv2.VideoCapture(1)
 fourcc=cv2.VideoWriter_fourcc(*'divx')
 del_x=0
 del_y=0
@@ -8,6 +13,8 @@ last_x=0
 last_y=0
 face_centre_x=0
 face_centre_y=0
+servoxval=90
+servoyval=90
 while True:
     ret,frame=cap.read()
     cv2.namedWindow('frame',cv2.WINDOW_NORMAL)
@@ -33,6 +40,12 @@ while True:
     print('number of faces={}'.format(c))
     print('\ndel_x={}'.format(del_x))
     print('\ndel_y={}'.format(del_y))
+    servoxval=90-(del_x*90/320) #this step will give actual x angle 
+    
+    servoxval=servoxval/20 #this will generate a number less than 9
+    print('servox={}'.format(servoxval))
+    Arduino_Serial.write(chr(servoxval))
+
     
     if cv2.waitKey(25) & 0xFF==ord('q'):
         break
