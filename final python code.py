@@ -4,7 +4,7 @@ import cv2
 Arduino_Serial = serial.Serial('com10',9600)  #Create Serial port object called arduinoSerialData
 print Arduino_Serial.readline()               #read the serial data and print it as line
 face_cascade= cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-cap=cv2.VideoCapture(1)
+cap=cv2.VideoCapture(0)
 fourcc=cv2.VideoWriter_fourcc(*'divx')
 pix_move_x=0
 pix_move_y=0
@@ -44,19 +44,36 @@ while True:
     print("pix_x={}".format(pix_move_x))
     print("pix_y={}".format(pix_move_y))
     print("changex={}".format(changex))
-    #divide the obtained angle to convert in an
+    print("changey={}".format(changey))
+    #divide the obtained angle to convert   in an
     #integer from 1-9 to send to the arduino    
     changex/=10
     changey/=10
+    #if(changex<0):
+        #Arduino_Serial.write(chr(changex))
+        #Arduino_Serial.write()
+      #  changex=0;
     
-##    if(changex<0):
-##        Arduino_Serial.write('-')
-##        changex*=-1
-
     print("changex={}".format(changex))
+
+    if (changex>0):
+        Arduino_Serial.write(chr(1))
+        Arduino_Serial.write(chr(changex))
+    else:   
+        Arduino_Serial.write(chr(0))    
+        Arduino_Serial.write(chr(abs(changex)))
     
-    Arduino_Serial.write(changex)
-    
+
+    #for y
+    print("changey={}".format(changey))
+
+    if (changey>0):
+        Arduino_Serial.write(chr(0))
+        Arduino_Serial.write(chr(abs(changey)))
+    else:   
+        Arduino_Serial.write(chr(1))    
+        Arduino_Serial.write(chr(abs(changey)))
+    print Arduino_Serial.readline()               #read the serial data and print it as line
     print Arduino_Serial.readline()               #read the serial data and print it as line
 
     if cv2.waitKey(25) & 0xFF==ord('q'):
