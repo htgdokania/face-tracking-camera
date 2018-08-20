@@ -25,9 +25,9 @@ void loop()
            change1=0;change2=0;
            bit1=Serial.read();
            delay(5);
-           change1= Serial.read();//change can be both +ve or -ve
-           delay(5);
            bit2=Serial.read();
+           delay(5);
+           change1= Serial.read();//change can be both +ve or -ve
            delay(5);
            change2 = Serial.read();//change can be both +ve or -ve
           
@@ -40,11 +40,12 @@ void loop()
            if((final_angle_y+change2)>=0 && (final_angle_y+change2)<=180)
               final_angle_y+=change2;
            
-           Serial.println(final_angle);
+           //Serial.println(final_angle);
            myservo1.write(final_angle);
-           Serial.println(final_angle_y);
+           //Serial.println(final_angle_y);
            myservo2.write(final_angle_y);
            
            
     }
 }
+

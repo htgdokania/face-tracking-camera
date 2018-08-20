@@ -49,32 +49,35 @@ while True:
     #integer from 1-9 to send to the arduino    
     changex/=10
     changey/=10
-    #if(changex<0):
-        #Arduino_Serial.write(chr(changex))
-        #Arduino_Serial.write()
-      #  changex=0;
     
     print("changex={}".format(changex))
-
-    if (changex>0):
-        Arduino_Serial.write(chr(1))
-        Arduino_Serial.write(chr(changex))
-    else:   
-        Arduino_Serial.write(chr(0))    
-        Arduino_Serial.write(chr(abs(changex)))
-    
-
-    #for y
     print("changey={}".format(changey))
+    
+    if (changex>=0 and changey>=0):
+        Arduino_Serial.write(chr(1))#bit for x
+        Arduino_Serial.write(chr(0))#bit for y
+        Arduino_Serial.write(chr(abs(changex)))#change x value send
+        Arduino_Serial.write(chr(abs(changey)))#
+    elif (changex>=0 and changey<0):
+        Arduino_Serial.write(chr(1))#bit for x
+        Arduino_Serial.write(chr(1))#bit for y
+        Arduino_Serial.write(chr(abs(changex)))#change x value send
+        Arduino_Serial.write(chr(abs(changey)))#
 
-    if (changey>0):
-        Arduino_Serial.write(chr(0))
-        Arduino_Serial.write(chr(abs(changey)))
-    else:   
-        Arduino_Serial.write(chr(1))    
-        Arduino_Serial.write(chr(abs(changey)))
-    print Arduino_Serial.readline()               #read the serial data and print it as line
-    print Arduino_Serial.readline()               #read the serial data and print it as line
+    elif (changex<0 and changey>=0):
+        Arduino_Serial.write(chr(0))#bit for x
+        Arduino_Serial.write(chr(0))#bit for y
+        Arduino_Serial.write(chr(abs(changex)))#change x value send
+        Arduino_Serial.write(chr(abs(changey)))#
+
+    elif (changex<0 and changey<0):
+        Arduino_Serial.write(chr(0))#bit for x
+        Arduino_Serial.write(chr(1))#bit for y
+        Arduino_Serial.write(chr(abs(changex)))#change x value send
+        Arduino_Serial.write(chr(abs(changey)))#
+
+    #print Arduino_Serial.readline()               #read the serial data and print it as line
+    #print Arduino_Serial.readline()               #read the serial data and print it as line
 
     if cv2.waitKey(25) & 0xFF==ord('q'):
         break
